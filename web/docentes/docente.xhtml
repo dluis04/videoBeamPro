@@ -13,46 +13,47 @@
     <body>
         <ui:composition template="../Templates/Template1.xhtml">
             <ui:define name="content">
-                <h1>Persona</h1>
+                <center><h3 class="text-capitalize text-primary"> Gestion de  Usuarios </h3></center> 
                 <h:form id="form"> 
                     <p:messages autoUpdate="true"/>
-
                     <h:panelGrid id="grid" columns="3" cellpadding="5">
-
-                        <p:outputLabel for="idNombre" value="Nombre:"/>
-                        <p:inputText id="idNombre" label="Nombre" required="true" value="#{docenteBean.docente.nombre}"/>
-                        <p:message for="idNombre"/>
-
-                        <p:outputLabel for="idApellido" value="Apellidos:"/>
-                        <p:inputText id="idApellido" label="Apellidos:" required="true" value="#{docenteBean.docente.apellido}"/>
-                        <p:message for="idApellido"/>
-
-                        <p:outputLabel for="idIdentificacion" value="Identificación:"/>
-
-                        <p:inputText id="idIdentificacion" validatorMessage="Debe ser numérico el campo Identifación" label="Identificación:"  required="true" value="#{docenteBean.docente.numeroId}">
-                            <f:validateRegex pattern="[0-9]+" />
-                        </p:inputText>
-                        <p:message for="idIdentificacion"/>
-
-
-                        <p:outputLabel for="idRol" value="Rol:"/>
-
-                        <p:selectOneMenu id="idRol" value="#{docenteBean.idRol2}" style="width: 225px" required="true" >
-                            <f:selectItems value="#{docenteBean.listRol}" var="idRol" itemLabel="#{idRol.description}" />
-                            <f:converter converterId="javax.faces.Integer"/>
-                        </p:selectOneMenu>
-                        <p:message for="idRol"/>
-
-
-                        <p:outputLabel for="idEmail" value="Email:"/>
-                        <p:inputText id="idEmail" label="Email:"  value="#{docenteBean.docente.email}"/>
-                        <p:message for="idEmail"/>
-
-
-                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{docenteBean.registrar}" update=":form,formTable:dtDocente" validateClient="true" />
+                        <div class="form-group">
+                            <label for="idNombre">Nombre</label><br></br>
+                            <h:inputText class="form-control" id="idNombre" label="Nombre" required="true" value="#{docenteBean.docente.nombre}"/>
+                            <p:message for="idNombre"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="idApellido">Apellido</label><br></br>
+                            <p:inputText class="form-control" id="idApellido" label="Apellidos:" required="true" value="#{docenteBean.docente.apellido}"/>
+                            <p:message for="idApellido"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="idIdentificacion">Nro Identificacion</label><br></br>
+                            <p:inputText class="form-control" id="idIdentificacion" validatorMessage="Debe ser numérico el campo Identifación" label="Identificación:"  required="true" value="#{docenteBean.docente.numeroId}">
+                                <f:validateRegex pattern="[0-9]+" />
+                            </p:inputText>
+                            <p:message for="idIdentificacion"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="idRol">Tipo Uusuario</label><br></br>
+                            <p:selectOneMenu id="idRol" value="#{docenteBean.idRol2}" style="width: 225px" required="true" >
+                                <f:selectItems  value="#{docenteBean.listRol}" var="idRol" itemLabel="#{idRol.description}" />
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </p:selectOneMenu>
+                            <p:message for="idRol"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="idEmail">Email</label><br></br>
+                            <p:inputText class="form-control" id="idEmail" label="Email:"  value="#{docenteBean.docente.email}"/>
+                            <p:message for="idEmail"/>
+                        </div>
+                        <br></br> <br></br>
+                        <center>
+                            <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{docenteBean.registrar}" update=":form,formTable:dtDocente" validateClient="true" />
+                        </center>
                     </h:panelGrid>
                 </h:form> 
-
+                <br></br>    <br></br>
                 <h:form id="formTable">
                     <p:dataTable id="dtDocente" editable="true" var="docenteVar" widgetVar="docenteTabla" value="#{docenteBean.docenteList}"  
                                  emptyMessage="No hay Docente Encontrados" 
@@ -69,7 +70,7 @@
 
                         <f:facet name="header">
                             <p:outputPanel >
-                                <h:outputText value="Buscar en todos los filtros:" />
+                                <h:outputText value="Filtros " />
                                 <p:inputText id="globalFilter" onkeyup="PF('docenteTabla').filter()" style="width:150px" placeholder=""/>
                             </p:outputPanel>
                         </f:facet>

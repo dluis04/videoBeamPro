@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Persona</title>
+        <link  href = "../Bootstrap/css/bootstrap.css"  rel = "stylesheet" />
+        <link  href = "../Bootstrap/css/bootstrap.min.css"  rel = "stylesheet" />
+    </h:head>
+    <body>
+        <ui:composition template="../Templates/Template1.xhtml">
+            <ui:define name="content">
+                <center><h3 class="text-capitalize text-primary"> Gestion Artefactos  </h3></center> 
+                <h:form id="form"> 
+                    <p:messages autoUpdate="true"/>
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <div class="form-group">
+                            <label for="idArtefacto">Artefacto</label><br></br>
+                            <h:inputText class="form-control" id="idArtefacto" label="Nombre" required="true" value="#{artifactypeBeam.tipoartefacto.descripcion}"/>
+                            <p:message for="idArtefacto"/>
+                        </div>
+
+                        <br></br> <br></br>
+                        <center>
+                            <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{artifactypeBeam.registrar()}" update=":form,formTable:dtArtefactType" validateClient="true" />
+                        </center>
+                    </h:panelGrid>
+                </h:form> 
+                <br></br>    <br></br>
+                <h:form id="formTable">
+                    <p:dataTable id="dtArtefactType" editable="true" var="ArtecfactipeVar" widgetVar="ArtefactotipoTabla" value="#{artifactypeBeam.artefactoList}"  
+                                 emptyMessage="No hay Docente Encontrados" 
+                                 filteredValue="#{artifactypeBeam.artefactoListFiltro}"
+                                 rows="10"
+                                 paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:ajax event="rowEdit" listener="#{artifactypeBeam.onRowEdit}"  update=":form:grid" />
+                        <p:ajax event="rowEditCancel" listener="#{artifactypeBeam.onRowCancel}" update=":form:grid" />
+
+                        <f:facet name="header">
+                            <p:outputPanel >
+                                <h:outputText value="Filtros " />
+                                <p:inputText id="globalFilter" onkeyup="PF('ArtefactotipoTabla').filter()" style="width:150px" placeholder=""/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactipeVar.idTipoartefacto}" headerText="Codigo Artefacto">
+                            <h:outputText value="#{ArtecfactipeVar.idTipoartefacto}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactipeVar.descripcion}" headerText="Tipo Artefacto">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ArtecfactipeVar.descripcion}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ArtecfactipeVar.descripcion}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column style="width:50px" >  
+
+                            <p:rowEditor />
+                            <p:commandLink  actionListener="#{artifactypeBeam.eliminar(ArtecfactipeVar)}" update=":formTable:dtArtefactType" styleClass="ui-icon ui-icon-trash" >
+                                <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar este artefacto?" icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </p:column> 
+
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">                                   
+                        <p:commandButton value="Si"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                </h:form>
+
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

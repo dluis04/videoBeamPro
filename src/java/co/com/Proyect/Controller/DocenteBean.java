@@ -35,16 +35,16 @@ public class DocenteBean {
     private List<SelectItem> listRol;
     private List<Rol> roles;
     private int idRol;
+    private int idRol2;
 
     public DocenteBean() {
         docente = new Persona();
         docenteTabla = new Persona();
         fetcPerson();
         listRol = new ArrayList();
-        
+
         for (Rol obj : fetcRol()) {
             listRol.add(new SelectItem(obj.getIdRol(), obj.getDescripcion()));
-            System.out.println("Descripcion -->> "+obj.getDescripcion());
         }
 
     }
@@ -78,11 +78,14 @@ public class DocenteBean {
         EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
         entityManager.getTransaction().begin();
         Rol x = new Rol();
-        x.setIdRol(1);
+        x.setIdRol(idRol2);
         docente.setIdRol(x);
         entityManager.persist(docente);
         entityManager.getTransaction().commit();
+        docente = null;
         docente = new Persona();
+        fetcPerson();
+
     }
 
     public void eliminar(Persona c) {
@@ -123,7 +126,6 @@ public class DocenteBean {
      */
     public void onRowEdit(RowEditEvent event) {
         docente = ((Persona) event.getObject());
-        System.out.println("Nombre " + ((Persona) event.getObject()).getNombre());
         FacesMessage msg = new FacesMessage("Persona Actualizada", ((Persona) event.getObject()).getNombre() + " " + ((Persona) event.getObject()).getApellido());
         FacesContext.getCurrentInstance().addMessage(null, msg);
         actualizarTable(docente);
@@ -204,6 +206,14 @@ public class DocenteBean {
 
     public void setIdRol(int idRol) {
         this.idRol = idRol;
+    }
+
+    public int getIdRol2() {
+        return idRol2;
+    }
+
+    public void setIdRol2(int idRol2) {
+        this.idRol2 = idRol2;
     }
 
 }

@@ -30,15 +30,24 @@
                         <p:inputText id="idIdentificacion" validatorMessage="Debe ser numérico el campo Identifación" label="Identificación:"  required="true" value="#{docenteBean.docente.numeroId}">
                             <f:validateRegex pattern="[0-9]+" />
                         </p:inputText>
-
                         <p:message for="idIdentificacion"/>
+
+
+                        <p:outputLabel for="idRol" value="Rol:"/>
+
+                        <p:selectOneMenu id="idRol" value="#{docenteBean.idRol2}" style="width: 225px" required="true" >
+                            <f:selectItems value="#{docenteBean.listRol}" var="idRol" itemLabel="#{idRol.description}" />
+                            <f:converter converterId="javax.faces.Integer"/>
+                        </p:selectOneMenu>
+                        <p:message for="idRol"/>
+
 
                         <p:outputLabel for="idEmail" value="Email:"/>
                         <p:inputText id="idEmail" label="Email:"  value="#{docenteBean.docente.email}"/>
                         <p:message for="idEmail"/>
 
 
-                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{docenteBean.registrar}" validateClient="true" />
+                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{docenteBean.registrar}" update=":form,formTable:dtDocente" validateClient="true" />
                     </h:panelGrid>
                 </h:form> 
 

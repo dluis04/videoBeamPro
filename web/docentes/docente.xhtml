@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Persona</title>
+    </h:head>
+    <body>
+        <ui:composition template="../Templates/Template1.xhtml">
+            <ui:define name="content">
+                <h1>Persona</h1>
+                <h:form id="form"> 
+                    <p:messages autoUpdate="true"/>
+
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+
+                        <p:outputLabel for="idNombre" value="Nombre:"/>
+                        <p:inputText id="idNombre" label="Nombre" required="true" value="#{docenteBean.docente.nombre}"/>
+                        <p:message for="idNombre"/>
+
+                        <p:outputLabel for="idApellido" value="Apellidos:"/>
+                        <p:inputText id="idApellido" label="Apellidos:" required="true" value="#{docenteBean.docente.apellido}"/>
+                        <p:message for="idApellido"/>
+
+                        <p:outputLabel for="idIdentificacion" value="Identificación:"/>
+
+                        <p:inputText id="idIdentificacion" validatorMessage="Debe ser numérico el campo Identifación" label="Identificación:"  required="true" value="#{docenteBean.docente.numeroId}">
+                            <f:validateRegex pattern="[0-9]+" />
+                        </p:inputText>
+
+                        <p:message for="idIdentificacion"/>
+
+                        <p:outputLabel for="idEmail" value="Email:"/>
+                        <p:inputText id="idEmail" label="Email:"  value="#{docenteBean.docente.email}"/>
+                        <p:message for="idEmail"/>
+
+
+                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{docenteBean.registrar}" validateClient="true" />
+                    </h:panelGrid>
+                </h:form> 
+
+
+                <h:form id="formTable">
+                    <p:dataTable id="dtDocente" editable="true" var="docenteVar" widgetVar="docenteTabla" value="#{docenteBean.docenteList}"  
+                                 emptyMessage="No hay Docente Encontrados" 
+                                 filteredValue="#{docenteBean.docenteListFiltro}"
+                                 rows="10"
+                                 paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:ajax event="rowEdit" listener="#{docenteBean.onRowEdit}"  update=":form:grid" />
+                        <p:ajax event="rowEditCancel" listener="#{docenteBean.onRowCancel}" update=":form:grid" />
+
+                        <f:facet name="header">
+                            <p:outputPanel >
+                                <h:outputText value="Buscar en todos los filtros:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('docenteTabla').filter()" style="width:150px" placeholder=""/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{docenteVar.numeroId}" headerText="Identificación">
+                            <h:outputText value="#{docenteVar.numeroId}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{docenteVar.nombre}" headerText="Nombre">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{docenteVar.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{docenteVar.nombre}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{docenteVar.apellido}"  filterStyle="display:none;" headerText="Apellidos">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{docenteVar.apellido}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{docenteVar.apellido}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{docenteBean.seleccion(docenteVar.idRol.idRol)}" filterStyle="display:none;" headerText="Rol">      
+
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{docenteBean.seleccion(docenteVar.idRol.idRol)}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="idTipo" value="#{docenteVar.idRol.idRol}" required="true" >
+                                        <f:selectItems value="#{docenteBean.listRol}" var="idRol" itemLabel="#{idRol.description}" />
+                                        <f:converter converterId="javax.faces.Integer"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>                           
+                        </p:column>
+
+                        <p:column filterBy="#{docenteVar.email}"  filterStyle="display:none;" headerText="Email" >
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{docenteVar.email}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{docenteVar.email}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:10px" >  
+
+                            <p:rowEditor />
+                            <p:commandLink  actionListener="#{docenteBean.eliminar(docenteVar)}" update=":formTable:dtDocente" styleClass="ui-icon ui-icon-trash" >
+                                <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar esta persona?" icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </p:column> 
+
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">                                   
+                        <p:commandButton value="Si"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                </h:form>
+
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

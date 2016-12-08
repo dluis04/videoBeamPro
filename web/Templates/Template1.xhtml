@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--<h:outputStylesheet name="/faces/resources/css/default.css"/>
+        <h:outputStylesheet name="faces/resources/css/cssLayout.css"/>-->
+        <title>VideoBeam</title>
+
+        <link href="../Recursos/estilo.css" rel="stylesheet" type="text/css" />    
+
+    </h:head>
+
+    <h:body>
+        <div class="cabezera">
+        </div>
+        <div id="top"  class="top">
+            <ui:insert name="top">
+                <h:form>  
+                    <p:growl id="messages"/> 
+                    <p:menubar>
+
+                        <p:menuitem value="Inicio" url="#" icon="ui-icon-arrowreturnthick-1-e" />
+                        <p:submenu label="Cliente" icon="ui-icon-pencil">
+                            <p:menuitem value="Registro Clientes" url="/faces/cliente/cliente.xhtml" />            
+                        </p:submenu>
+
+                        <p:submenu label="Obra" icon="ui-icon-pencil">
+                            <p:menuitem value="Registro Obras" url="/faces/obra/obra.xhtml" />            
+                        </p:submenu>
+
+                        <p:submenu label="Vehiculos" icon="ui-icon-pencil">
+                            <p:menuitem value="Registro Vehiculo" url="/faces/vehiculo/vehiculo.xhtml" />            
+                        </p:submenu>
+
+                        <p:submenu label="Usuario" icon="ui-icon-pencil">
+                            <p:menuitem value="Registro Usuario" url="/faces/usuarios/usuario.xhtml" />                         
+                        </p:submenu>
+
+                        <p:submenu label="Equipo" icon="ui-icon-pencil">
+                            <p:menuitem value="Registro Equipo" url="/faces/equipo/equipo.xhtml" />    
+                            <p:menuitem value="Registro Tipo Equipo" url="/faces/equipo/tipoEquipo.xhtml" />                       
+                        </p:submenu>
+
+                        <p:submenu label="Alquiler" icon="ui-icon-pencil">
+                            <p:menuitem value="Salidas" url="/faces/kardex/salida.xhtml" />  
+                            <p:menuitem value="Entradas" url="/faces/kardex/entrada.xhtml" /> 
+                        </p:submenu>
+
+                        <p:submenu label="Reportes" icon="ui-icon-pencil">
+                            <p:menuitem value="Equipos Alquilados" url="/faces/reportes/equiposAlquiladosPorObra.xhtml" />    
+                            <p:menuitem value="Equipos Disponibles" url="/faces/reportes/equiposDisponibles.xhtml" />                       
+                        </p:submenu>
+
+
+                        <p:menuitem value="Quit" url="http://www.edmodo.com" icon="ui-icon-close" />
+
+
+                    </p:menubar>
+                </h:form>
+
+            </ui:insert>
+        </div>
+
+        <div id="content" class="center_content" >
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+
+        <div class="pies">
+        </div>
+
+    </h:body>
+
+</html>

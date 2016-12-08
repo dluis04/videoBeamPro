@@ -1,0 +1,60 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 6/11/2016, 12:39:02 PM
+    Author     : jpantoja
+*/
+
+.cabezera
+{
+    margin: 0 auto; text-align: center;
+    background: url('cabezera.png');
+    width:1020px;
+    height:130px;
+
+}
+
+
+.top{
+    margin: 0 auto; text-align: center;
+
+    width:1020px;
+    height:40px; 
+
+
+
+}
+
+.center_content{
+
+
+    /*background-color: #ffffff;*/
+    /*background-image:  url('f1.jpg');*/
+    /*background: url('../../../Recursos/cabezera.png');*/
+    margin: 0 auto;
+    text-align: center;
+    width:1012px;
+    height:950px;
+    border-color:#06C;
+    border-width: 4px;
+    border-style: solid;  
+
+
+}
+
+
+
+.pies
+
+{
+    margin: 0 auto;
+    text-align: center;
+
+    background: url('pie.png');
+    width:1020px;
+    height:100px;
+
+}

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Inicio</title>
+        <h:outputStylesheet name="css/jsfcrud.css"/>
+        <link  href = "../Bootstrap/css/bootstrap.css"  rel = "stylesheet" />
+        <link  href = "../Bootstrap/css/bootstrap.min.css"  rel = "stylesheet" />
+    </h:head>
+    <h:body>
+        <ui:composition template="Templates/Template1.xhtml">
+            <ui:define name="content">
+                <div class="container">
+                    <div class="row">
+                        <br></br>
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <h3 class="text-capitalize text-primary">Sistema de reservas Para Artefactos Audiovisuales</h3> 
+                            </div>
+                            <div class="panel-footer">
+
+                                <h5>Solo podra realizar una reserva si usted es un docente UNIAJC.</h5>
+                                <br></br>
+                                <h5>Para Ingresar y/o consultar su estado, digite su numero de cedula.</h5>
+                                <br></br>
+                                <h:form>
+
+                                    <h:outputText value=""/>
+                                    <h:inputText value="#{personaSearch.person.numeroId}"/>
+                                    <br></br><br></br>
+
+                                    <h6 class="text-danger"><h:messages class="alert alert-info" showDetail="true"></h:messages></h6>
+                                    <h:commandButton class="btn-default" value="Consultar" 
+                                                     actionListener="#{personaSearch.buscarPersona()}"  >
+
+                                    </h:commandButton>
+                                    <input type="reset" class="btn-default" value="Limpiar"></input>
+
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

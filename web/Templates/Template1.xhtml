@@ -11,67 +11,38 @@
         <!--<h:outputStylesheet name="/faces/resources/css/default.css"/>
         <h:outputStylesheet name="faces/resources/css/cssLayout.css"/>-->
         <title>VideoBeam</title>
-
+        <link  href = "../Bootstrap/css/bootstrap.css"  rel = "stylesheet" />
+        <link  href = "../Bootstrap/css/bootstrap.min.css"  rel = "stylesheet" />
         <link href="../Recursos/estilo.css" rel="stylesheet" type="text/css" />    
 
     </h:head>
 
     <h:body>
-        <div class="cabezera">
+        <nav class="navbar navbar-default navbar-static-top">
+        </nav>
+        <div class="container">
+            <div class="row">
+                <img src="../Images/Logo.png" class="img-responsive" alt="Responsive image"></img>
+            </div>
         </div>
         <div id="top"  class="top">
             <ui:insert name="top">
-                <h:form>  
-                    <p:growl id="messages"/> 
-                    <p:menubar>
-
-                        <p:menuitem value="Inicio" url="#" icon="ui-icon-arrowreturnthick-1-e" />
-                        <p:submenu label="Cliente" icon="ui-icon-pencil">
-                            <p:menuitem value="Registro Clientes" url="/faces/cliente/cliente.xhtml" />            
-                        </p:submenu>
-
-                        <p:submenu label="Obra" icon="ui-icon-pencil">
-                            <p:menuitem value="Registro Obras" url="/faces/obra/obra.xhtml" />            
-                        </p:submenu>
-
-                        <p:submenu label="Vehiculos" icon="ui-icon-pencil">
-                            <p:menuitem value="Registro Vehiculo" url="/faces/vehiculo/vehiculo.xhtml" />            
-                        </p:submenu>
-
-                        <p:submenu label="Usuario" icon="ui-icon-pencil">
-                            <p:menuitem value="Registro Usuario" url="/faces/usuarios/usuario.xhtml" />                         
-                        </p:submenu>
-
-                        <p:submenu label="Equipo" icon="ui-icon-pencil">
-                            <p:menuitem value="Registro Equipo" url="/faces/equipo/equipo.xhtml" />    
-                            <p:menuitem value="Registro Tipo Equipo" url="/faces/equipo/tipoEquipo.xhtml" />                       
-                        </p:submenu>
-
-                        <p:submenu label="Alquiler" icon="ui-icon-pencil">
-                            <p:menuitem value="Salidas" url="/faces/kardex/salida.xhtml" />  
-                            <p:menuitem value="Entradas" url="/faces/kardex/entrada.xhtml" /> 
-                        </p:submenu>
-
-                        <p:submenu label="Reportes" icon="ui-icon-pencil">
-                            <p:menuitem value="Equipos Alquilados" url="/faces/reportes/equiposAlquiladosPorObra.xhtml" />    
-                            <p:menuitem value="Equipos Disponibles" url="/faces/reportes/equiposDisponibles.xhtml" />                       
-                        </p:submenu>
-
-
-                        <p:menuitem value="Quit" url="http://www.edmodo.com" icon="ui-icon-close" />
-
-
-                    </p:menubar>
-                </h:form>
 
             </ui:insert>
         </div>
 
-        <div id="content" class="center_content" >
-            <ui:insert name="content">Content</ui:insert>
-        </div>
-
-        <div class="pies">
+        <!--aqui -->
+        <div class="container">
+            <div class="row">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <h3 class="text-capitalize text-primary"> Sistema de VideoBeams </h3> 
+                    </div>
+                    <div class="panel-footer">
+                        <ui:insert name="content">Content</ui:insert>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </h:body>

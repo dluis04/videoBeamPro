@@ -74,7 +74,6 @@ public class DocenteBean {
     }
 
     public void registrar() {
-
         EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
         entityManager.getTransaction().begin();
         Rol x = new Rol();

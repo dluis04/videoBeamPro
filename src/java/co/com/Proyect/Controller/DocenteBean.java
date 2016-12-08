@@ -84,7 +84,6 @@ public class DocenteBean {
         docente = null;
         docente = new Persona();
         fetcPerson();
-
     }
 
     public void eliminar(Persona c) {

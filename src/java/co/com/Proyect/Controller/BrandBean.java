@@ -6,7 +6,6 @@
 package co.com.Proyect.Controller;
 
 import co.com.Proyect.Model.Marca;
-import co.com.Proyect.Model.Persona;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;

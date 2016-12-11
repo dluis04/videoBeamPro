@@ -20,7 +20,9 @@
                     <h:panelGrid id="grid" columns="3" cellpadding="5">
 
                         <p:outputLabel for="idCantidad" value="Cantidad limite: "/>
-                        <p:inputText id="idCantidad" label="Cantidad limite:" required="true" value="#{brandBean.marcaArtefacto.horaslimitesoperacion}"/>
+                        <p:inputText id="idCantidad" label="Cantidad limite:" validatorMessage="Debe ser numérico el campo Cantidad limite" required="true" value="#{brandBean.marcaArtefacto.horaslimitesoperacion}">
+                            <f:validateRegex pattern="[0-9]+" />
+                        </p:inputText>
                         <p:message for="idCantidad"/>
 
                         <p:outputLabel for="idDescripcion" value="Descripcion:"/>

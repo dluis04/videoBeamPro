@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Artefacto</title>
+        <link  href = "../Bootstrap/css/bootstrap.css"  rel = "stylesheet" />
+        <link  href = "../Bootstrap/css/bootstrap.min.css"  rel = "stylesheet" />
+    </h:head>
+    <body>
+        <ui:composition template="../Templates/Template1.xhtml">
+            <ui:define name="content">
+                <center><h3 class="text-capitalize text-primary"> Gestion Artefactos</h3></center> 
+                <h:form id="form"> 
+                    <p:messages autoUpdate="true"/>
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <div class="form-group">
+                            <label for="tipoArtefacto">Tipo Artefacto: </label><br></br>
+                            <p:selectOneMenu id="tipoArtefacto" value="#{artifactBean.idArtefacto}" style="width: 225px" required="true" >
+                                <f:selectItems  value="#{artifactBean.listArtefactoItem}" var="idArtefacto" itemLabel="#{idArtefacto.description}" />
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </p:selectOneMenu>
+                            <p:message for="tipoArtefacto"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoMarca">Marca: </label><br></br>
+                            <p:selectOneMenu id="tipoMarca" value="#{artifactBean.idMarca}" style="width: 225px" required="true" >
+                                <f:selectItems  value="#{artifactBean.listMarca}" var="idMarca" itemLabel="#{idMarca.description}" />
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </p:selectOneMenu>
+                            <p:message for="tipoMarca"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoEstado">Estado: </label><br></br>
+                            <p:selectOneMenu id="tipoEstado" value="#{artifactBean.idEstado}" style="width: 225px" required="true" >
+                                <f:selectItems  value="#{artifactBean.listEstado}" var="idEstado" itemLabel="#{idEstado.description}" />
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </p:selectOneMenu>
+                            <p:message for="tipoEstado"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Hora en uso: </label><br></br>
+                            <p:inputText class="form-control" id="hora" validatorMessage="Debe ser numérico el campo Hora en Uso" label="Hora en Uso:"  required="true" value="#{artifactBean.artefacto.horasenoperacion}">
+                                <f:validateRegex pattern="[0-9]+" />
+                            </p:inputText>
+                            <p:message for="hora"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cicloUso">Ciclo Uso: </label><br></br>
+                            <p:inputText class="form-control" id="cicloUso" validatorMessage="Debe ser numérico el campo Ciclo Uso" label="Ciclo Uso:"  required="true" value="#{artifactBean.artefacto.ciclouso}">
+                                <f:validateRegex pattern="[0-9]+" />
+                            </p:inputText>
+                            <p:message for="cicloUso"/>
+                        </div>
+                        <br></br> <br></br>
+                        <center>
+                            <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{artifactBean.registrar()}" update=":form,formTable:dtArtefact" validateClient="true" />
+                        </center>
+                    </h:panelGrid>
+                </h:form> 
+                <br></br>    <br></br>
+                <h:form id="formTable">
+
+                    <p:dataTable id="dtArtefact" editable="true" var="ArtecfactVar" widgetVar="ArtefactoTabla" value="#{artifactBean.listArtefacto}"  
+                                 emptyMessage="No hay Artefactos Encontrados" 
+                                 filteredValue="#{artifactBean.listArtefactoFiltro}"
+                                 rows="10"
+                                 paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:ajax event="rowEdit" listener="#{artifactBean.onRowEdit}"  update=":form:grid" />
+                        <p:ajax event="rowEditCancel" listener="#{artifactBean.onRowCancel}" update=":form:grid" />
+
+                        <f:facet name="header">
+                            <p:outputPanel >
+                                <h:outputText value="Filtros " />
+                                <p:inputText id="globalFilter" onkeyup="PF('ArtefactoTabla').filter()" style="width:150px" placeholder=""/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idArtefacto}" headerText="Codigo Artefacto">
+                            <h:outputText value="#{ArtecfactVar.idArtefacto}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idTipoartefacto.descripcion}" headerText="Tipo Artefacto">
+
+                            <h:outputText value="#{ArtecfactVar.idTipoartefacto.descripcion}" />
+
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idMarca.descripcion}" headerText="Marca">
+                            <h:outputText value="#{ArtecfactVar.idMarca.descripcion}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.ciclouso}" headerText="Ciclo Uso">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ArtecfactVar.ciclouso}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ArtecfactVar.ciclouso}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.horasenoperacion}" headerText="Hora en uso">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{ArtecfactVar.horasenoperacion}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{ArtecfactVar.horasenoperacion}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{docenteBean.seleccion(docenteVar.idRol.idRol)}" filterStyle="display:none;" headerText="Estado">      
+
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{artifactBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="tipoEstado2" value="#{artifactBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" style="width: 225px" required="true" >
+                                        <f:selectItems  value="#{artifactBean.listEstado}" var="idEstado" itemLabel="#{idEstado.description}" />
+                                        <f:converter converterId="javax.faces.Integer"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor>                           
+                        </p:column>
+
+                        <p:column style="width:50px" >  
+
+                            <p:rowEditor />
+                            <p:commandLink  actionListener="#{artifactBeam.eliminar(ArtecfactVar)}" update=":formTable:dtArtefact" styleClass="ui-icon ui-icon-trash" >
+                                <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar este artefacto?" icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </p:column> 
+
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">                                   
+                        <p:commandButton value="Si"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

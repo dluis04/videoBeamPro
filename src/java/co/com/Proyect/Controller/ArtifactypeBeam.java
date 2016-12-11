@@ -5,18 +5,12 @@
  */
 package co.com.Proyect.Controller;
 
-import co.com.Proyect.Model.Artefacto;
-import co.com.Proyect.Model.Persona;
-import co.com.Proyect.Model.Rol;
 import co.com.Proyect.Model.Tipoartefacto;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;

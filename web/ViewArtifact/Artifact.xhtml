@@ -44,14 +44,14 @@
                         <div class="form-group">
                             <label for="hora">Hora en uso: </label><br></br>
                             <p:inputText class="form-control" id="hora" validatorMessage="Debe ser numérico el campo Hora en Uso" label="Hora en Uso:"  required="true" value="#{artifactBean.artefacto.horasenoperacion}">
-                                <f:validateRegex pattern="[0-9]+" />
+
                             </p:inputText>
                             <p:message for="hora"/>
                         </div>
                         <div class="form-group">
                             <label for="cicloUso">Ciclo Uso: </label><br></br>
                             <p:inputText class="form-control" id="cicloUso" validatorMessage="Debe ser numérico el campo Ciclo Uso" label="Ciclo Uso:"  required="true" value="#{artifactBean.artefacto.ciclouso}">
-                                <f:validateRegex pattern="[0-9]+" />
+
                             </p:inputText>
                             <p:message for="cicloUso"/>
                         </div>
@@ -118,7 +118,7 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{artifactBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" /></f:facet>
                                 <f:facet name="input">
-                                    <p:selectOneMenu id="tipoEstado2" value="#{artifactBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" style="width: 225px" required="true" >
+                                    <p:selectOneMenu id="tipoEstado2" value="#{ArtecfactVar.idEstado.idEstado}" style="width: 225px" required="true" >
                                         <f:selectItems  value="#{artifactBean.listEstado}" var="idEstado" itemLabel="#{idEstado.description}" />
                                         <f:converter converterId="javax.faces.Integer"/>
                                     </p:selectOneMenu>
@@ -126,10 +126,9 @@
                             </p:cellEditor>                           
                         </p:column>
 
-                        <p:column style="width:50px" >  
-
+                        <p:column style="width:50px" > 
                             <p:rowEditor />
-                            <p:commandLink  actionListener="#{artifactBeam.eliminar(ArtecfactVar)}" update=":formTable:dtArtefact" styleClass="ui-icon ui-icon-trash" >
+                            <p:commandLink  actionListener="#{artifactBean.eliminar(ArtecfactVar)}" update=":formTable:dtArtefact" styleClass="ui-icon ui-icon-trash" >
                                 <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar este artefacto?" icon="ui-icon-alert" />
                             </p:commandLink>
                         </p:column> 

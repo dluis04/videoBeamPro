@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Reservas</title>
+        <link  href = "../Bootstrap/css/bootstrap.css"  rel = "stylesheet" />
+        <link  href = "../Bootstrap/css/bootstrap.min.css"  rel = "stylesheet" />
+    </h:head>
+    <body>
+        <ui:composition template="../Templates/Template1.xhtml">
+            <ui:define name="content">
+                <h1>Gestion de reservas</h1>
+                <h:form id="form"> 
+                    <p:messages autoUpdate="true"/>
+
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+
+
+
+                        <p:outputLabel for="fechaDesde" value="Fecha Desde"/>
+                        <p:calendar id="fechaDesde" label="Fecha Desde" required="true" value="#{reportesBean.fechaDesde}" pattern="MM/dd/yyyy HH:mm"/>
+
+
+                        <p:outputLabel for="fechaHasta" value="Fecha Hasta"/>
+                        <p:calendar id="fechaHasta" label="Fecha Hasta" required="true" value="#{reportesBean.fechaHasta}" pattern="MM/dd/yyyy HH:mm"/>
+                        <
+                        <p:message for="idCantidad"/>
+
+                      <p:message for="idDescripcion"/>
+
+                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{brandBean.registrar}" update=":form,formTable:dtMarca" validateClient="true" />
+                    </h:panelGrid>
+                </h:form> 
+
+                <h:form id="formTable">
+                    <p:dataTable id="dtMarca" editable="true" var="marcaVar" widgetVar="marcaTabla" value="#{brandBean.marcaList}"  
+                                 emptyMessage="No hay marcas encontrados" 
+                                 filteredValue="#{brandBean.marcaListFiltro}"
+                                 rows="10"
+                                 paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:ajax event="rowEdit" listener="#{brandBean.onRowEdit}"  update=":form:grid" />
+                        <p:ajax event="rowEditCancel" listener="#{brandBean.onRowCancel}" update=":form:grid" />
+
+                        <f:facet name="header">
+                            <p:outputPanel >
+                                <h:outputText value="Buscar en todos los filtros:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('marcaTabla').filter()" style="width:150px" placeholder=""/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{marcaVar.idMarca}" headerText="Codigo">
+                            <h:outputText value="#{marcaVar.idMarca}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{marcaVar.horaslimitesoperacion}" headerText="Cantidad Limite">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{marcaVar.horaslimitesoperacion}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{marcaVar.horaslimitesoperacion}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column filterBy="#{marcaVar.descripcion}"  filterStyle="display:none;" headerText="Descripcion">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{marcaVar.descripcion}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{marcaVar.descripcion}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:10px" >  
+                            <p:rowEditor />
+                            <p:commandLink  actionListener="#{brandBean.eliminar(marcaVar)}" update=":formTable:dtMarca" styleClass="ui-icon ui-icon-trash" >
+                                <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar esta Marca?" icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </p:column> 
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">                                   
+                        <p:commandButton value="Si"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+
+                </h:form>
+
+
+            </ui:define>
+
+
+        </ui:composition>
+
+    </body>
+</html>

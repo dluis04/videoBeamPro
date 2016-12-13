@@ -76,7 +76,7 @@ public class ArtifactBean {
         Estado estado = new Estado();
         Tipoartefacto tipo = new Tipoartefacto();
         marca.setIdMarca(idMarca);
-        tipo.setIdTipoartefacto(1);
+        tipo.setIdTipoartefacto(idArtefacto);
         estado.setIdEstado(idEstado);
         artefacto.setIdMarca(marca);
         artefacto.setIdEstado(estado);
@@ -86,6 +86,16 @@ public class ArtifactBean {
         artefacto = null;
         artefacto = new Artefacto();
         fetcArtefacto();
+
+    }
+
+    public void actualizarTable(Artefacto Artf) {
+        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.merge(Artf);
+        entityManager.getTransaction().commit();
+//        UsuarioDaoImpl Usuariodao = new UsuarioDaoImpl();
+//        Usuariodao.update(usuario);
     }
 
     public void llenarCombos() {
@@ -165,26 +175,26 @@ public class ArtifactBean {
      *
      */
     public void onRowEdit(RowEditEvent event) {
-//        tipoartefacto = ((Tipoartefacto) event.getObject());
-//        FacesMessage msg = new FacesMessage("Artefacto Actualizad0", "");
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//        actualizarTable(tipoartefacto);
-//        tipoartefacto = new Tipoartefacto();
+        artefacto = ((Artefacto) event.getObject());
+        FacesMessage msg = new FacesMessage("Artefacto Actualizad0", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        actualizarTable(artefacto);
+        artefacto = new Artefacto();
     }
 
     public void eliminar(Artefacto c) {
-//        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
-//        Query query = entityManager.createNamedQuery("Tipoartefacto.findByIdTipoartefacto");
-//        query.setParameter("idTipoartefacto", c.getIdTipoartefacto());
-//        Tipoartefacto tipArt = (Tipoartefacto) query.getSingleResult();
-//        entityManager.getTransaction().begin();
-//
-//        entityManager.remove(tipArt);
-//
-//        entityManager.getTransaction().commit();
-//        fetctipoArtefacto();
-//        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Tipo Artefacto eliminado", "");
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
+        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
+        Query query = entityManager.createNamedQuery("Artefacto.findByIdArtefacto");
+        query.setParameter("idArtefacto", c.getIdArtefacto());
+        Artefacto art = (Artefacto) query.getSingleResult();
+        entityManager.getTransaction().begin();
+
+        entityManager.remove(art);
+
+        entityManager.getTransaction().commit();
+        fetcArtefacto();
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Artefacto eliminado", "");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
 
     }
 

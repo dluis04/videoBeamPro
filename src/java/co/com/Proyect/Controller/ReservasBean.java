@@ -81,32 +81,80 @@ public class ReservasBean {
     }
 
     public void registrar() {
-
         EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
-        String descripcionEstado=selectArtefacto.getIdEstado().getDescripcion();
+        String descripcionEstado = selectArtefacto.getIdEstado().getDescripcion();
         if (descripcionEstado.equalsIgnoreCase("Reservado") || descripcionEstado.equalsIgnoreCase("Inactivo") || descripcionEstado.equalsIgnoreCase("En Reparacion")) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El artefacto se encuentra "+descripcionEstado+" No se puede reservar", "");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El artefacto se encuentra " + descripcionEstado + " No se puede reservar", "");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            entityManager.getTransaction().begin();
-            reserva.setIdReserva(fetcReserva().size() + 1);
-            reserva.setHorainicio(fechaDesde);
-            reserva.setHorafin(fechaHasta);
-            reserva.setNumeroId(selectPersona);
-            reserva.setIdArtefacto(selectArtefacto);
-            entityManager.persist(reserva);
-            entityManager.getTransaction().commit();
-            actualizarArtefactoEstado(selectArtefacto.getIdArtefacto());
-            selectPersona = null;
-            selectArtefacto = null;
-            reserva = null;
-            selectPersona = new Persona();
-            selectArtefacto = new Artefacto();
-            reserva = new Reserva();
-            fechaDesde = null;
-            fechaHasta = null;
-            fetcArtefacto();
+            int horas = ((fechaDesde.getHours() - fechaHasta.getHours()) * -1);
+            int minutos = (fechaDesde.getMinutes() + fechaHasta.getMinutes());
+            int total = 0;
+
+            if (minutos == 60) {
+                total = (selectArtefacto.getHorasenoperacion() + horas + 1);
+            } else {
+                total = (selectArtefacto.getHorasenoperacion() + horas);
+            }
+
+            if (total > selectArtefacto.getIdMarca().getHoraslimitesoperacion()) {
+                entityManager.getTransaction().begin();
+                reserva.setIdReserva(fetcReserva().size() + 1);
+                reserva.setHorainicio(fechaDesde);
+                reserva.setHorafin(fechaHasta);
+                reserva.setNumeroId(selectPersona);
+                reserva.setIdArtefacto(selectArtefacto);
+                entityManager.persist(reserva);
+                entityManager.getTransaction().commit();
+                actualizarArtefactoCiclo(selectArtefacto.getIdArtefacto());
+                selectPersona = null;
+                selectArtefacto = null;
+                reserva = null;
+                selectPersona = new Persona();
+                selectArtefacto = new Artefacto();
+                reserva = new Reserva();
+                fechaDesde = null;
+                fechaHasta = null;
+                fetcArtefacto();
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Desconto " + ((selectArtefacto.getIdMarca().getHoraslimitesoperacion() - total) * -1) + " horas del tiempo, ya que el artefacto cumple su ciclo de uso.", "");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            } else {
+                entityManager.getTransaction().begin();
+                reserva.setIdReserva(fetcReserva().size() + 1);
+                reserva.setHorainicio(fechaDesde);
+                reserva.setHorafin(fechaHasta);
+                reserva.setNumeroId(selectPersona);
+                reserva.setIdArtefacto(selectArtefacto);
+                entityManager.persist(reserva);
+                entityManager.getTransaction().commit();
+                actualizarArtefactoEstado(selectArtefacto.getIdArtefacto());
+                selectPersona = null;
+                selectArtefacto = null;
+                reserva = null;
+                selectPersona = new Persona();
+                selectArtefacto = new Artefacto();
+                reserva = new Reserva();
+                fechaDesde = null;
+                fechaHasta = null;
+                fetcArtefacto();
+            }
         }
+    }
+
+    public void actualizarArtefactoCiclo(int idArtefacto) {
+        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
+        Query query = entityManager.createNamedQuery("Artefacto.findByIdArtefacto");
+
+        query.setParameter("idArtefacto", idArtefacto);
+        Artefacto art = (Artefacto) query.getSingleResult();
+        art.setCiclouso(art.getCiclouso() + 1);
+        art.setHorasenoperacion(0);
+        Estado estado = new Estado();
+        estado.setIdEstado(4);
+        entityManager.getTransaction().begin();
+        art.setIdEstado(estado);
+        entityManager.merge(art);
+        entityManager.getTransaction().commit();
     }
 
     public void actualizarArtefactoEstado(int idArtefacto) {

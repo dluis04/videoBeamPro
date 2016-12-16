@@ -178,6 +178,8 @@ public class DocenteBean {
         return docenteListFiltro;
     }
 
+    
+    
     public void setDocenteListFiltro(List<Persona> docenteListFiltro) {
         this.docenteListFiltro = docenteListFiltro;
     }

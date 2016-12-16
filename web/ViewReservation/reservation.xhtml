@@ -61,9 +61,26 @@
                             <h:outputText value="#{ArtecfactVar.idMarca.descripcion}" />
                         </p:column>
 
-                        <p:column filterBy="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" filterStyle="display:none;" headerText="Estado">      
-                            <h:outputText value="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" />     
+                        <p:column filterBy="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" filterStyle="display:none;" headerText="Estado">         
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="tipoEstado2" value="#{ArtecfactVar.idEstado.idEstado}" style="width: 225px" required="true" >
+                                        <f:selectItems  value="#{reservasBean.listEstado}" var="idEstado" itemLabel="#{idEstado.description}" />
+                                        <f:converter converterId="javax.faces.Integer"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                            </p:cellEditor> 
+
                         </p:column>
+
+                        <p:column style="width:50px" > 
+                            <p:rowEditor />
+                        </p:column> 
+
+
+
+
                     </p:dataTable>
 
                     <br></br>    <br></br>

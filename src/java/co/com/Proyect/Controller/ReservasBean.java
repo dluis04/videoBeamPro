@@ -17,9 +17,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -38,13 +40,16 @@ public class ReservasBean {
     private Persona selectPersona;
     private List<Persona> docenteList;
     private List<Persona> docenteListFiltro;
+    private List<SelectItem> listEstado;
+    private int idEstado;
 
     public ReservasBean() {
         reserva = new Reserva();
-        selectPersona = new Persona();
-        selectArtefacto = new Artefacto();
+        selectPersona = null;
+        selectArtefacto = null;
         fetcArtefacto();
         fetcPerson();
+        llenarCombos();
     }
 
     private void fetcArtefacto() {
@@ -52,6 +57,7 @@ public class ReservasBean {
             EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
             Query query = entityManager.createNamedQuery("Artefacto.findAll");
             ListArtefacto = query.getResultList();
+            System.out.println("Entro artefacto");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,63 +87,69 @@ public class ReservasBean {
     }
 
     public void registrar() {
-        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
-        String descripcionEstado = selectArtefacto.getIdEstado().getDescripcion();
-        if (descripcionEstado.equalsIgnoreCase("Reservado") || descripcionEstado.equalsIgnoreCase("Inactivo") || descripcionEstado.equalsIgnoreCase("En Reparacion")) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El artefacto se encuentra " + descripcionEstado + " No se puede reservar", "");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        } else {
-            int horas = ((fechaDesde.getHours() - fechaHasta.getHours()) * -1);
-            int minutos = (fechaDesde.getMinutes() + fechaHasta.getMinutes());
-            int total = 0;
 
-            if (minutos == 60) {
-                total = (selectArtefacto.getHorasenoperacion() + horas + 1);
-            } else {
-                total = (selectArtefacto.getHorasenoperacion() + horas);
-            }
-
-            if (total > selectArtefacto.getIdMarca().getHoraslimitesoperacion()) {
-                entityManager.getTransaction().begin();
-                reserva.setIdReserva(fetcReserva().size() + 1);
-                reserva.setHorainicio(fechaDesde);
-                reserva.setHorafin(fechaHasta);
-                reserva.setNumeroId(selectPersona);
-                reserva.setIdArtefacto(selectArtefacto);
-                entityManager.persist(reserva);
-                entityManager.getTransaction().commit();
-                actualizarArtefactoCiclo(selectArtefacto.getIdArtefacto());
-                selectPersona = null;
-                selectArtefacto = null;
-                reserva = null;
-                selectPersona = new Persona();
-                selectArtefacto = new Artefacto();
-                reserva = new Reserva();
-                fechaDesde = null;
-                fechaHasta = null;
-                fetcArtefacto();
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Desconto " + ((selectArtefacto.getIdMarca().getHoraslimitesoperacion() - total) * -1) + " horas del tiempo, ya que el artefacto cumple su ciclo de uso.", "");
+        if (selectArtefacto != null && selectPersona != null) {
+            EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
+            String descripcionEstado = selectArtefacto.getIdEstado().getDescripcion();
+            if (descripcionEstado.equalsIgnoreCase("Reservado") || descripcionEstado.equalsIgnoreCase("Inactivo") || descripcionEstado.equalsIgnoreCase("En Reparacion")) {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "El artefacto se encuentra " + descripcionEstado + " No se puede reservar", "");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             } else {
-                entityManager.getTransaction().begin();
-                reserva.setIdReserva(fetcReserva().size() + 1);
-                reserva.setHorainicio(fechaDesde);
-                reserva.setHorafin(fechaHasta);
-                reserva.setNumeroId(selectPersona);
-                reserva.setIdArtefacto(selectArtefacto);
-                entityManager.persist(reserva);
-                entityManager.getTransaction().commit();
-                actualizarArtefactoEstado(selectArtefacto.getIdArtefacto());
-                selectPersona = null;
-                selectArtefacto = null;
-                reserva = null;
-                selectPersona = new Persona();
-                selectArtefacto = new Artefacto();
-                reserva = new Reserva();
-                fechaDesde = null;
-                fechaHasta = null;
-                fetcArtefacto();
+                int horas = ((fechaDesde.getHours() - fechaHasta.getHours()) * -1);
+                int minutos = (fechaDesde.getMinutes() + fechaHasta.getMinutes());
+                int total = 0;
+
+                if (minutos == 60) {
+                    total = (selectArtefacto.getHorasenoperacion() + horas + 1);
+                } else {
+                    total = (selectArtefacto.getHorasenoperacion() + horas);
+                }
+
+                if (total > selectArtefacto.getIdMarca().getHoraslimitesoperacion()) {
+                    entityManager.getTransaction().begin();
+                    reserva.setIdReserva(fetcReserva().size() + 1);
+                    reserva.setHorainicio(fechaDesde);
+                    reserva.setHorafin(fechaHasta);
+                    reserva.setNumeroId(selectPersona);
+                    reserva.setIdArtefacto(selectArtefacto);
+                    entityManager.persist(reserva);
+                    entityManager.getTransaction().commit();
+                    actualizarArtefactoCiclo(selectArtefacto.getIdArtefacto());
+                    selectPersona = null;
+                    selectArtefacto = null;
+                    reserva = null;
+                    selectPersona = new Persona();
+                    selectArtefacto = new Artefacto();
+                    reserva = new Reserva();
+                    fechaDesde = null;
+                    fechaHasta = null;
+                    fetcArtefacto();
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se Desconto " + ((selectArtefacto.getIdMarca().getHoraslimitesoperacion() - total) * -1) + " horas del tiempo, ya que el artefacto cumple su ciclo de uso.", "");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                } else {
+                    entityManager.getTransaction().begin();
+                    reserva.setIdReserva(fetcReserva().size() + 1);
+                    reserva.setHorainicio(fechaDesde);
+                    reserva.setHorafin(fechaHasta);
+                    reserva.setNumeroId(selectPersona);
+                    reserva.setIdArtefacto(selectArtefacto);
+                    entityManager.persist(reserva);
+                    entityManager.getTransaction().commit();
+                    actualizarArtefactoEstado(selectArtefacto.getIdArtefacto());
+                    selectPersona = null;
+                    selectArtefacto = null;
+                    reserva = null;
+                    reserva = new Reserva();
+                    fechaDesde = null;
+                    fechaHasta = null;
+                    fetcArtefacto();
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva exitosa", "");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
             }
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Debe seleccionar las opciones de artefacto y persona para realizar la reserva", "");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
@@ -236,6 +248,34 @@ public class ReservasBean {
         return roles;
     }
 
+    public void llenarCombos() {
+        listEstado = new ArrayList();
+
+        for (Estado objEstado : fetcEstados()) {
+            listEstado.add(new SelectItem(objEstado.getIdEstado(), objEstado.getDescripcion()));
+        }
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        Artefacto artefacto = ((Artefacto) event.getObject());
+        FacesMessage msg = new FacesMessage("Artefacto Actualizado", "");
+
+        if (artefacto.getIdEstado().getIdEstado() == 1 || artefacto.getIdEstado().getIdEstado() == 2) {
+            artefacto.setHorasenoperacion(0);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        actualizarTable(artefacto);
+    }
+
+    public void actualizarTable(Artefacto Artf) {
+        EntityManager entityManager = Persistence.createEntityManagerFactory("ProyectoFinalPU").createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.merge(Artf);
+        entityManager.getTransaction().commit();
+//        UsuarioDaoImpl Usuariodao = new UsuarioDaoImpl();
+//        Usuariodao.update(usuario);
+    }
+
     public Date getFechaDesde() {
         return fechaDesde;
     }
@@ -306,6 +346,22 @@ public class ReservasBean {
 
     public void setReserva(Reserva reserva) {
         this.reserva = reserva;
+    }
+
+    public List<SelectItem> getListEstado() {
+        return listEstado;
+    }
+
+    public void setListEstado(List<SelectItem> listEstado) {
+        this.listEstado = listEstado;
+    }
+
+    public int getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(int idEstado) {
+        this.idEstado = idEstado;
     }
 
 }

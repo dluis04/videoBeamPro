@@ -18,83 +18,95 @@
                     <p:messages autoUpdate="true"/>
 
                     <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <div class="form-group">
+                            <label for="fechaDesde">Fecha Desde*</label><br></br>
+                            <p:calendar id="fechaDesde"  label="Fecha Desde" required="true" value="#{reservasBean.fechaDesde}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                            <p:message for="fechaDesde"/>
+                        </div>
 
-
-
-                        <p:outputLabel for="fechaDesde" value="Fecha Desde"/>
-                        <p:calendar id="fechaDesde" label="Fecha Desde" required="true" value="#{reportesBean.fechaDesde}" pattern="MM/dd/yyyy HH:mm"/>
-
-
-                        <p:outputLabel for="fechaHasta" value="Fecha Hasta"/>
-                        <p:calendar id="fechaHasta" label="Fecha Hasta" required="true" value="#{reportesBean.fechaHasta}" pattern="MM/dd/yyyy HH:mm"/>
-                        <
-                        <p:message for="idCantidad"/>
-
-                      <p:message for="idDescripcion"/>
-
-                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{brandBean.registrar}" update=":form,formTable:dtMarca" validateClient="true" />
+                        <div class="form-group">
+                            <label for="fechaHasta">Fecha Hasta*</label><br></br>
+                            <p:calendar id="fechaHasta"  label="Fecha Hasta" required="true" value="#{reservasBean.fechaHasta}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                            <p:message for="fechaHasta"/>
+                        </div>               
+                        <br></br> <br></br>
+                        <p:commandButton id="btnEnviar" value="Guardar" actionListener="#{reservasBean.registrar}" update=":form" validateClient="true" />
                     </h:panelGrid>
-                </h:form> 
 
-                <h:form id="formTable">
-                    <p:dataTable id="dtMarca" editable="true" var="marcaVar" widgetVar="marcaTabla" value="#{brandBean.marcaList}"  
-                                 emptyMessage="No hay marcas encontrados" 
-                                 filteredValue="#{brandBean.marcaListFiltro}"
+                    <p:dataTable id="dtArtefact" editable="true" var="ArtecfactVar" widgetVar="ArtefactoTabla" value="#{reservasBean.listArtefacto}"  
+                                 emptyMessage="No hay Artefactos Encontrados" 
+                                 filteredValue="#{reservasBean.listArtefactoFiltro}"
                                  rows="10"
                                  paginator="true"
-
+                                 selection="#{reservasBean.selectArtefacto}" selectionMode="single" rowKey="#{ArtecfactVar.idArtefacto}" 
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="5,10,15">
 
-
-                        <p:ajax event="rowEdit" listener="#{brandBean.onRowEdit}"  update=":form:grid" />
-                        <p:ajax event="rowEditCancel" listener="#{brandBean.onRowCancel}" update=":form:grid" />
-
                         <f:facet name="header">
                             <p:outputPanel >
-                                <h:outputText value="Buscar en todos los filtros:" />
-                                <p:inputText id="globalFilter" onkeyup="PF('marcaTabla').filter()" style="width:150px" placeholder=""/>
+                                <h:outputText value="Filtros " />
+                                <p:inputText id="globalFilter" onkeyup="PF('ArtefactoTabla').filter()" style="width:150px" placeholder=""/>
                             </p:outputPanel>
                         </f:facet>
 
-                        <p:column  filterStyle="display:none;" filterBy="#{marcaVar.idMarca}" headerText="Codigo">
-                            <h:outputText value="#{marcaVar.idMarca}" />
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idArtefacto}" headerText="Codigo Artefacto">
+                            <h:outputText value="#{ArtecfactVar.idArtefacto}" />
                         </p:column>
 
-                        <p:column  filterStyle="display:none;" filterBy="#{marcaVar.horaslimitesoperacion}" headerText="Cantidad Limite">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{marcaVar.horaslimitesoperacion}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{marcaVar.horaslimitesoperacion}" /></f:facet>
-                            </p:cellEditor>
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idTipoartefacto.descripcion}" headerText="Tipo Artefacto">
+                            <h:outputText value="#{ArtecfactVar.idTipoartefacto.descripcion}" />
                         </p:column>
 
-                        <p:column filterBy="#{marcaVar.descripcion}"  filterStyle="display:none;" headerText="Descripcion">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{marcaVar.descripcion}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{marcaVar.descripcion}" /></f:facet>
-                            </p:cellEditor>
+                        <p:column  filterStyle="display:none;" filterBy="#{ArtecfactVar.idMarca.descripcion}" headerText="Marca">
+                            <h:outputText value="#{ArtecfactVar.idMarca.descripcion}" />
                         </p:column>
 
-                        <p:column style="width:10px" >  
-                            <p:rowEditor />
-                            <p:commandLink  actionListener="#{brandBean.eliminar(marcaVar)}" update=":formTable:dtMarca" styleClass="ui-icon ui-icon-trash" >
-                                <p:confirm header="Confirmar" message="¿Esta seguro que desea eliminar esta Marca?" icon="ui-icon-alert" />
-                            </p:commandLink>
-                        </p:column> 
+                        <p:column filterBy="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" filterStyle="display:none;" headerText="Estado">      
+                            <h:outputText value="#{reservasBean.seleccionEstado(ArtecfactVar.idEstado.idEstado)}" />     
+                        </p:column>
                     </p:dataTable>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">                                   
-                        <p:commandButton value="Si"  type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
+                    <br></br>    <br></br>
+                    <p:dataTable id="dtDocente" editable="true" var="docenteVar" widgetVar="docenteTabla" value="#{reservasBean.docenteList}"  
+                                 emptyMessage="No hay Docente Encontrados" 
+                                 filteredValue="#{reservasBean.docenteListFiltro}"
+                                 rows="10"
+                                 paginator="true"
+                                 selection="#{reservasBean.selectPersona}" selectionMode="single" rowKey="#{docenteVar.numeroId}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
 
-                </h:form>
+                        <f:facet name="header">
+                            <p:outputPanel >
+                                <h:outputText value="Filtros " />
+                                <p:inputText id="globalFilter" onkeyup="PF('docenteTabla').filter()" style="width:150px" placeholder=""/>
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{docenteVar.numeroId}" headerText="Identificación">
+                            <h:outputText value="#{docenteVar.numeroId}" />
+                        </p:column>
+
+                        <p:column  filterStyle="display:none;" filterBy="#{docenteVar.nombre}" headerText="Nombre">
+                            <h:outputText value="#{docenteVar.nombre}" />
+                        </p:column>
+
+                        <p:column filterBy="#{docenteVar.apellido}"  filterStyle="display:none;" headerText="Apellidos">
+                            <h:outputText value="#{docenteVar.apellido}" />
+                        </p:column>
+
+                        <p:column filterBy="#{reservasBean.seleccion(docenteVar.idRol.idRol)}" filterStyle="display:none;" headerText="Rol">      
+                            <h:outputText value="#{reservasBean.seleccion(docenteVar.idRol.idRol)}" />
+                        </p:column>
+
+                        <p:column filterBy="#{docenteVar.email}"  filterStyle="display:none;" headerText="Email" >
+                            <h:outputText value="#{docenteVar.email}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form> 
 
 
             </ui:define>
-
-
         </ui:composition>
-
     </body>
 </html>
